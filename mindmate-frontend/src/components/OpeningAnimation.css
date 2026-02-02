@@ -1,0 +1,14 @@
+.modal-backdrop{position:fixed;inset:0;background:rgba(8,10,15,0.35);display:flex;align-items:center;justify-content:center;z-index:60}
+.modal-window{width:86%;max-width:920px;background:var(--card);border-radius:14px;padding:16px 20px;box-shadow:var(--shadow);animation: pop .18s ease}
+@keyframes pop{0%{transform:scale(.98);opacity:0}100%{transform:none;opacity:1}}
+.modal-header h3{margin:0;font-size:20px}
+.modal-body{max-height:58vh;overflow:auto;padding-top:12px}
+.question-row{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid #f3f4f6}
+.q-text{flex:1;color:#1f2937;font-weight:600}
+.q-options{display:flex;gap:8px;flex-wrap:wrap}
+.opt{background:#fff;border:1px solid #e6eef7;padding:8px 12px;border-radius:12px;cursor:pointer;transition:all .15s}
+.opt.sel{background:linear-gradient(90deg,#ffdabc,#fff);border-color:#f0b67f;box-shadow:0 6px 18px rgba(240,181,127,0.12)}
+.modal-footer{display:flex;gap:12px;justify-content:flex-end;padding-top:12px}
+.btn{padding:9px 14px;border-radius:10px;border:1px solid #ddd;cursor:pointer}
+.btn.primary{background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff;border:none}
+.btn.neutral{background:#fff}

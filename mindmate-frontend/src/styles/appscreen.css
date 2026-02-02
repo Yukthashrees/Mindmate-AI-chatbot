@@ -1,0 +1,73 @@
+/* FULL SCREEN DESKTOP BACKGROUND */
+.pc-app-container {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #e9fff6, #fff1ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Inter", sans-serif;
+}
+
+/* ============= SPLASH ============= */
+.pc-splash {
+  text-align: center;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.pc-splash-logo {
+  width: 140px;
+  height: 140px;
+  background: linear-gradient(135deg, #2ad9b7, #2a7cf0);
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 46px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  animation: floatUp 0.9s ease;
+}
+
+.pc-splash-title {
+  font-size: 36px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.pc-splash-sub {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #4b5563;
+}
+
+@keyframes floatUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============= PC APP WINDOW ============= */
+.pc-app-window {
+  width: 900px;
+  max-width: 94%;
+  height: 85vh;
+  background: #ffffff;
+  border-radius: 22px;
+  box-shadow: 0 18px 70px rgba(20, 40, 60, 0.18);
+  overflow: hidden;
+}
+
+.animate-window {
+  animation: popIn 0.5s ease forwards;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}

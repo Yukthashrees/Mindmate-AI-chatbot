@@ -1,0 +1,49 @@
+/* phqgad.css - minimal styles for PHQ & GAD modals */
+.phq-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 32, 52, 0.32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+.phq-modal {
+  width: 760px;
+  max-width: calc(100% - 40px);
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(6,20,40,0.18);
+  padding: 18px;
+  animation: modalEnter 260ms cubic-bezier(.2,.9,.3,1);
+}
+
+@keyframes modalEnter {
+  from { transform: translateY(12px) scale(.98); opacity:0 }
+  to { transform: translateY(0) scale(1); opacity: 1 }
+}
+
+.phq-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px }
+.phq-header h3 { margin:0; color:#082032; font-size:18px }
+.phq-close { background:transparent; border:none; font-size:18px; cursor:pointer; color:#667788 }
+
+.phq-intro { color:#445; margin-bottom:12px; font-size:14px }
+
+/* question layout */
+.phq-questions { max-height:52vh; overflow:auto; padding-right:6px; }
+.phq-question { padding:10px 6px; border-bottom:1px dashed rgba(10,20,30,0.04); display:block }
+.phq-qtext { font-weight:600; margin-bottom:8px; color:#123040 }
+.phq-options { display:flex; gap:8px; flex-wrap:wrap; align-items:center }
+
+.phq-option { display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; background:#fff; border:1px solid rgba(10,20,30,0.04); cursor:pointer; font-size:13px; }
+.phq-option input { margin:0; }
+.phq-option.selected { background:linear-gradient(90deg,#f0fbf8,#f7f8ff); border-color:rgba(42,124,240,0.12) }
+
+.phq-footer { margin-top:12px; display:flex; justify-content:space-between; align-items:center }
+.phq-error { color:#b00020; font-weight:700 }
+
+.phq-actions { display:flex; gap:10px }
+.phq-btn { padding:10px 14px; border-radius:10px; border:none; cursor:pointer; font-weight:700 }
+.phq-btn.primary { background: linear-gradient(90deg,#2ad9b7,#2a7cf0); color:white; box-shadow:0 12px 30px rgba(42,124,240,0.12) }
+.phq-btn.secondary { background:white; color:#123040; border:1px solid rgba(10,20,30,0.06) }

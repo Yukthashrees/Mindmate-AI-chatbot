@@ -1,0 +1,15 @@
+/* global basics, fonts, body */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+:root{
+  --bg1: #f6fffb;
+  --bg2: #fff8ff;
+  --accent-a: #2ad9b7;
+  --accent-b: #2a7cf0;
+  --muted: #6a7280;
+  --card-shadow: 0 20px 60px rgba(8,18,30,0.06);
+}
+
+*{box-sizing:border-box}
+html,body,#root{height:100%; margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Arial;}
+body{background:linear-gradient(120deg,var(--bg1),var(--bg2));}
