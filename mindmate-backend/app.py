@@ -32,10 +32,10 @@ app.register_blueprint(phq_bp, url_prefix='/api')
 app.register_blueprint(gad_bp, url_prefix='/api')
 
 # MongoDB Connection
-MONGO_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017/")
+MONGO_URI = os.getenviron.get("MONGODB_URI")
 DB_NAME = os.getenv("DB_NAME", "mindmate")
 client = MongoClient(MONGO_URI)
-db = client[DB_NAME]
+db = client.get_database["MindMateDB"]
 
 # Collections
 users_col = db["users"]
