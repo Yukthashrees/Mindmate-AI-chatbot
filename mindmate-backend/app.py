@@ -24,8 +24,7 @@ from services.twilio_service import send_sms_alert
 app = Flask(__name__)
 
 # --- CONFIGURATION ---
-CORS(app, resources={r"/api/*": {"origins": "*"}})
-
+CORS(app)
 # --- BLUEPRINT REGISTRATION (The missing step causing 404s) ---
 app.register_blueprint(chat_bp, url_prefix='/api')
 app.register_blueprint(phq_bp, url_prefix='/api')

@@ -192,7 +192,7 @@ const Chat = () => {
     setIsTyping(true);
 
     try {
-      const response = await fetch("https://mindmate-ai-chatbot-your-well-wisher.onrender.com/chat", {
+      const response = await fetch("https://mindmate-ai-chatbot-your-well-wisher.onrender.com/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -251,7 +251,7 @@ const Chat = () => {
 
   const saveToDatabase = async (data) => {
     try {
-      const response = await fetch('https://mindmate-ai-chatbot-your-well-wisher.onrender.com', {
+      const response = await fetch('https://mindmate-ai-chatbot-your-well-wisher.onrender.com/api/save-patient', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

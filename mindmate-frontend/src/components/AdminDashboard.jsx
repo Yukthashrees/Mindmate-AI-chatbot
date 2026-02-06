@@ -98,7 +98,7 @@ const DASHBOARD_STYLES = `
   }
 `;
 
-const API_BASE = "http://localhost:5000";
+const API_BASE = "https://mindmate-ai-chatbot-your-well-wisher.onrender.com";
 
 export default function AdminDashboard() {
   // --- STATE ---
