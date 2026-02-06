@@ -192,7 +192,7 @@ const Chat = () => {
     setIsTyping(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/api/chat", {
+      const response = await fetch("https://mindmate-ai-chatbot-your-well-wisher.onrender.com/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -227,7 +227,7 @@ const Chat = () => {
       setShowResult(true);
       const endpoint = activeTest === "PHQ" ? "submit-phq" : "submit-gad";
       
-      fetch(`http://127.0.0.1:5000/api/${endpoint}`, {
+      fetch(`https://mindmate-ai-chatbot-your-well-wisher.onrender.com/${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -251,7 +251,7 @@ const Chat = () => {
 
   const saveToDatabase = async (data) => {
     try {
-      const response = await fetch('https://mindmate-ai-chatbot-your-well-wisher.onrender.com/api/chat', {
+      const response = await fetch('https://mindmate-ai-chatbot-your-well-wisher.onrender.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

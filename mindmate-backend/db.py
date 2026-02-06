@@ -4,7 +4,8 @@ from datetime import datetime
 from bson.objectid import ObjectId
 
 # Use the exact same DB name as your working app.py
-MONGO_URI = "mongodb://localhost:27017/"
+
+MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
 MONGO_DB = "mindmate_db" 
 
 client = MongoClient(MONGO_URI)
