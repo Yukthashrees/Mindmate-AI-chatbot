@@ -1,26 +1,53 @@
 from flask import Blueprint, request, jsonify
+from openai import OpenAI
+import os
+from dotenv import load_dotenv
 
-chat_blueprint = Blueprint("chat", __name__)
+# Force load the .env file locally in this file
+load_dotenv()
 
-def simple_reply_for_message(msg):
-    """Very small rule-based handler for demo/testing."""
-    text = (msg or "").lower()
-    # if user says yes after offer, open phq
-    if "phq" in text or "question" in text or "assessment" in text:
-        return {"action": "open_phq", "message": "Okay — I'll open the short PHQ now. Please answer honestly."}
-    if "gad" in text or "anx" in text:
-        return {"action": "open_gad", "message": "Okay — I'll open the short GAD now. Please answer honestly."}
+chat_bp = Blueprint('chat', __name__)
 
-    # simple emotional keywords
-    if any(k in text for k in ["sad","stressed","anxious","depressed","low"]):
-        return {"reply":"Got it, thanks for letting me know. Would you like a short guided check-in? (yes/no)"}
-
-    # default
-    return {"reply":"Thanks for sharing that with me. If you'd like, I can ask a few quick questions to better understand how you're doing."}
-
-@chat_blueprint.route("/api/chat", methods=["POST"])
+@chat_bp.route("/chat", methods=["POST"])
 def chat():
-    data = request.get_json(silent=True) or {}
-    message = data.get("message", "")
-    resp = simple_reply_for_message(message)
-    return jsonify(resp), 200
+    # Fetch the key and the URL
+    api_key = os.getenv("GROQ_API_KEY")
+    base_url = "https://api.groq.com/openai/v1"
+
+    # Safety check: if the key is still None, we send a clear message
+    if not api_key:
+        print("CRITICAL ERROR: GROQ_API_KEY not found in environment!")
+        return jsonify({"reply": "System Error: API Key missing.", "ok": False}), 500
+
+    try:
+        # Initialize client inside the route with explicit key
+        client = OpenAI(
+            base_url=base_url,
+            api_key=api_key
+        )
+
+        data = request.get_json()
+        user_msg = data.get("message", "")
+
+        completion = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "system", 
+                    "content": (
+                        "You are Mindmate, a concise mental health assistant. "
+                        "Keep your responses very brief, supportive, and under 2-3 sentences. "
+                        "Never give long paragraphs. Focus on one small piece of advice at a time."
+                        "Always bring a smile on their face and stay positive"
+                    )
+                },
+                {"role": "user", "content": user_msg}
+            ]
+        )
+        
+        reply = completion.choices[0].message.content
+        return jsonify({"reply": reply, "ok": True})
+
+    except Exception as e:
+        print(f"Chat Error: {str(e)}")
+        return jsonify({"reply": "I'm having trouble thinking. Please try again.", "ok": False}), 500

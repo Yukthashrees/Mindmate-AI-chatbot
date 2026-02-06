@@ -1,7 +1,56 @@
-.app-shell {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Caveat:wght@600&display=swap');
+
+:root {
+  --bg-dark: #0f172a;
+  --accent-grad: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%);
+  --note-phq: rgba(255, 205, 243, 0.9);
+  --note-gad: rgba(255, 247, 176, 0.9);
+  --note-ground: rgba(224, 207, 252, 0.9);
 }
+
+/* Background Layers */
+.subtle-bg {
+  position: absolute; inset: 0; background-size: cover; background-position: center;
+  filter: brightness(0.5) blur(4px); /* Darker for better contrast */
+  opacity: 0; transition: opacity 3s ease-in-out; z-index: 1;
+}
+.subtle-bg.active { opacity: 1; }
+
+/* Mobile Glass Shell */
+.mindmate-shell {
+  width: 90%; max-width: 420px; height: 88vh; border-radius: 40px;
+  background: rgba(255, 255, 255, 0.2); 
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden; z-index: 10;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+}
+
+.mm-chat-box { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; }
+
+/* Doctor Slider */
+.doctor-hero-container {
+  border-radius: 25px; height: 300px; margin-bottom: 20px;
+  position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+.hero-slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: 1.5s; }
+.hero-slide.active { opacity: 1; }
+
+/* Menu Notes */
+.sticky-note { 
+  padding: 18px; border: none; border-radius: 18px; font-weight: 700; 
+  cursor: pointer; font-size: 15px; transition: 0.3s;
+  margin-bottom: 12px; color: #334155; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.sticky-note:hover { transform: scale(1.02); }
+.phq { background: var(--note-phq); }
+.gad { background: var(--note-gad); }
+.ground { background: var(--note-ground); }
+
+/* Bubbles */
+.bubble { max-width: 85%; padding: 14px 18px; border-radius: 22px; margin-bottom: 12px; }
+.bubble.bot { background: rgba(241, 245, 249, 0.95); align-self: flex-start; color: #334155; }
+.bubble.user { background: var(--accent-grad); color: white; align-self: flex-end; }
+
+.back-link { background: none; border: none; color: white; text-decoration: underline; margin-top: 20px; cursor: pointer; opacity: 0.7; }

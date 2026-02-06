@@ -1,7 +1,13 @@
-import React from "react";
-import Chat from "./components/Chat";
-import "./App.css";
+import Chat from './components/Chat';
+import './App.css';
 
-export default function App() {
-  return <Chat />;
+function App() {
+  return (
+    <div className="App">
+      <Chat />
+    </div>
+  );
 }
+
+// THIS IS THE CRITICAL LINE YOU ARE MISSING:
+export default App;
