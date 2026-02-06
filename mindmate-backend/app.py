@@ -35,7 +35,7 @@ app.register_blueprint(gad_bp, url_prefix='/api')
 MONGO_URI = os.environ.get("MONGO_URI")
 DB_NAME = os.getenv("DB_NAME", "mindmate")
 client = MongoClient(MONGO_URI)
-db = client.get_database["MindMateDB"]
+db = client.get_database("MindMateDB")
 
 # Collections
 users_col = db["users"]
