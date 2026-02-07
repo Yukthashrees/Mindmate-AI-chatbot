@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from openai import OpenAI
-import httpx  # Add this import at the top
+import httpx
 import os
 from dotenv import load_dotenv
 
@@ -14,16 +14,17 @@ def chat():
     base_url = "https://api.groq.com/openai/v1"
 
     if not api_key:
-        return jsonify({"reply": "API Key missing.", "ok": False}), 500
+        return jsonify({"reply": "System Error: API Key missing.", "ok": False}), 500
 
     try:
-        # The FIX: Create a clean httpx client without proxy settings
-        http_client = httpx.Client(proxies=None) 
+        # THE FIX: Create a custom HTTP client that ignores the 'proxies' argument
+        # This prevents the 500 error on Render
+        custom_client = httpx.Client(proxies=None)
 
         client = OpenAI(
             base_url=base_url,
             api_key=api_key,
-            http_client=http_client # Inject the clean client here
+            http_client=custom_client
         )
 
         data = request.get_json(force=True) or {}
@@ -32,7 +33,10 @@ def chat():
         completion = client.chat.completions.create(
             model="llama3-8b-8192", 
             messages=[
-                {"role": "system", "content": "You are Mindmate, a kind, brief assistant."},
+                {
+                    "role": "system", 
+                    "content": "You are Mindmate, a kind mental health assistant. Keep responses under 3 sentences."
+                },
                 {"role": "user", "content": user_msg}
             ]
         )
@@ -41,5 +45,5 @@ def chat():
         return jsonify({"reply": reply, "ok": True})
 
     except Exception as e:
-        print(f"DEBUG ERROR: {str(e)}")
-        return jsonify({"reply": "I'm having trouble thinking.", "ok": False}), 500
+        print(f"DEBUG CHAT ERROR: {str(e)}")
+        return jsonify({"reply": "I'm having trouble thinking. Please try again.", "ok": False}), 500
