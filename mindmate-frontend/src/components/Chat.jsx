@@ -227,7 +227,7 @@ const Chat = () => {
       setShowResult(true);
       const endpoint = activeTest === "PHQ" ? "submit-phq" : "submit-gad";
       
-      fetch(`https://mindmate-ai-chatbot-your-well-wisher.onrender.com/${endpoint}`, {
+      fetch(`https://mindmate-ai-chatbot-your-well-wisher.onrender.com/api/${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
