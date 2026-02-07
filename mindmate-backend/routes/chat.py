@@ -26,11 +26,11 @@ def chat():
             api_key=api_key
         )
 
-        data = request.get_json()
-        user_msg = data.get("message", "")
+        data = request.get_json(force=True) or {}
+        user_msg = data.get("message", "Hello")
 
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+           model="llama3-8b-8192",
             messages=[
                 {
                     "role": "system", 
