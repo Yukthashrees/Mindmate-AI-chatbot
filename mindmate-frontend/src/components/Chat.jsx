@@ -99,6 +99,14 @@ const POSITIVE_QUOTES = [
   "Take a deep breath; you've got this."
 ];
 
+const RESULT_QUOTES = [
+    "“You don't have to see the whole staircase, just take the first step.”",
+    "“Self-care is how you take your power back.”",
+    "“This too shall pass, and you are stronger than you think.”",
+    "“Healing is not linear, and that is okay. You are doing great.”",
+    "“Your current situation is not your final destination.”"
+];
+
 const GROUNDING_STEPS = [
   { count: 5, task: "Things you can see", color: "rgba(145, 182, 211, 0.9)" },
   { count: 4, task: "Things you can touch", color: "rgba(202, 219, 175, 0.9)" },
@@ -113,6 +121,7 @@ const Chat = () => {
   const [wallIndex, setWallIndex] = useState(0);
   const [heroIndex, setHeroIndex] = useState(0);
   const [quoteIndex, setQuoteIndex] = useState(0);
+  const [resultQuoteIdx, setResultQuoteIdx] = useState(0);
   const [lang, setLang] = useState("en");
   const [voiceEnabled, setVoiceEnabled] = useState(false);
   const [isListening, setIsListening] = useState(false);
@@ -134,9 +143,9 @@ const Chat = () => {
   const t = TRANSLATIONS[lang];
 
   useEffect(() => {
-    // 2. Reduce Audio Volume to be subtle
+    // REDUCED VOLUME: set to 0.05 for very low background audio
     if (audioRef.current) {
-      audioRef.current.volume = 0.2; 
+      audioRef.current.volume = 0.05; 
     }
 
     const introTimer = setInterval(() => setIntroIdx(p => (p + 1) % POSITIVE_WALLPAPERS.length), 4000);
@@ -159,10 +168,22 @@ const Chat = () => {
   const startListening = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) return alert("Browser not supported");
+    
     const recognition = new SpeechRecognition();
     recognition.lang = t.voiceCode;
-    recognition.onstart = () => setIsListening(true);
-    recognition.onend = () => setIsListening(false);
+
+    recognition.onstart = () => {
+      setIsListening(true);
+      // Mute music while recording
+      if (audioRef.current) audioRef.current.pause();
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+      // Resume music after recording
+      if (audioRef.current && !showIntro) audioRef.current.play().catch(() => {});
+    };
+
     recognition.onresult = (e) => setInputText(e.results[0][0].transcript);
     recognition.start();
   };
@@ -224,6 +245,7 @@ const Chat = () => {
     if (currentQ < MULTI_QUESTIONS[lang][activeTest].length - 1) {
       setCurrentQ(currentQ + 1);
     } else {
+      setResultQuoteIdx(Math.floor(Math.random() * RESULT_QUOTES.length));
       setShowResult(true);
       const endpoint = activeTest === "PHQ" ? "submit-phq" : "submit-gad";
       
@@ -233,6 +255,7 @@ const Chat = () => {
         body: JSON.stringify({
           name: patientData.name,
           score: nextScore,
+          emergencyContact: patientData.emergency,
           answers: Array(MULTI_QUESTIONS[lang][activeTest].length).fill(points) 
         }),
       })
@@ -395,11 +418,14 @@ const Chat = () => {
                   </h2>
                   <p style={{ fontSize: '20px', fontWeight: 'bold' }}>Total Score: {score}</p>
                   
+                  <div className="post-test-quote" style={{ margin: '20px 0', padding: '15px', background: 'rgba(255,255,255,0.6)', borderRadius: '15px', borderLeft: '5px solid #ff9a9e' }}>
+                     <p style={{ fontStyle: 'italic', color: '#555' }}>{RESULT_QUOTES[resultQuoteIdx]}</p>
+                  </div>
+
                   {score >= 20 && (
-                    <div className="severity-info" style={{ marginTop: '20px', background: 'rgba(255,255,255,0.5)', padding: '15px', borderRadius: '10px' }}>
+                    <div className="severity-info" style={{ marginTop: '10px', background: 'rgba(255,255,255,0.5)', padding: '15px', borderRadius: '10px' }}>
                       <p><strong>Recommendation:</strong> Your score suggests you may be experiencing severe distress. Please consult a mental health professional.</p>
-                      <p style={{ fontStyle: 'italic', marginTop: '10px' }}>"Healing is not linear, be patient with yourself."</p>
-                      <p style={{ color: '#d32f2f', fontWeight: 'bold' }}>An alert has been sent to your emergency contact.</p>
+                      <p style={{ color: '#d32f2f', fontWeight: 'bold', marginTop: '10px' }}>An alert has been sent to your emergency contact.</p>
                     </div>
                   )}
                   <button className="pill purple" onClick={() => setMode("menu")} style={{ marginTop: '20px' }}>Back to Menu</button>
@@ -422,7 +448,6 @@ const Chat = () => {
           {mode === "chatting" && (
             <div className="chat-window animate-in" style={{ height: '550px', display: 'flex', flexDirection: 'column' }}>
                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '20px 25px', alignItems: 'center' }}>
-                 {/* 3. Positive Quote Interface in Header */}
                  <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <span style={{ fontWeight: '600', fontSize: '18px' }}>MindMate-Your well wisher</span>
                     <span style={{ fontSize: '12px', color: '#888', fontStyle: 'italic' }}>{POSITIVE_QUOTES[quoteIndex]}</span>
@@ -444,7 +469,6 @@ const Chat = () => {
                  
                  {messages.map((m, i) => (
                     <div key={i} className={`msg-${m.role}`} style={{ 
-                        // 4. Soft Pink User Bubbles
                         background: m.role === 'user' ? '#ff9a9e' : 'white', 
                         color: m.role === 'user' ? 'white' : 'black',
                         padding: '15px 20px', 
@@ -468,7 +492,7 @@ const Chat = () => {
             </div>
           )}
 
-          <div className="chat-bar" style={{ margin: '15px 25px 25px', background: 'white', borderRadius: '50px', padding: '8px 15px', display: 'flex', alignItems: 'center', boxShadow: '0 4px 15px rgba(0,0,0,0.05)' }}>
+          <div className="chat-bar" style={{ margin: '15px 25px 15px', background: 'white', borderRadius: '50px', padding: '8px 15px', display: 'flex', alignItems: 'center', boxShadow: '0 4px 15px rgba(0,0,0,0.05)' }}>
             <button className={`mic-btn ${isListening ? 'listening' : ''}`} onClick={startListening} style={{border:'none', background:'none', cursor:'pointer', fontSize: '18px', marginRight: '10px'}}>
                🎤
             </button>
@@ -484,6 +508,11 @@ const Chat = () => {
               ➤
             </button>
           </div>
+
+          <div className="safety-footer" style={{ textAlign: 'center', paddingBottom: '15px', fontSize: '10px', color: '#888', opacity: 0.7 }}>
+             MindMate is an AI assistant, not a doctor. In a crisis, please call your local emergency services.
+          </div>
+
         </div>
       </div>
     </div>
